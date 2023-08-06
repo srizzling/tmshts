@@ -16,8 +16,15 @@ then
 
     for del in ${PUBLIC_HOLIDAYS[@]}
     do
+        echo $del
         DAYS_OF_WEEK=("${DAYS_OF_WEEK[@]/$del}")
     done
+
+    for day in ${DAYS_OF_WEEK[@]}
+    do
+        echo $day
+    done
+    echo $DAYS_OF_WEEK
 fi
 
 if [[ $WEEK == "this" ]]
