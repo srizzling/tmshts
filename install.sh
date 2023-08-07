@@ -23,4 +23,4 @@ SCRIPT_PATH="$(pwd)/tmsht.fish"
 chmod +x "$SCRIPT_PATH"
 
 # Add the fish script to cron
-echo "0 17 * * 5 /usr/bin/fish $SCRIPT_PATH | sudo tee -a /etc/crontab > /dev/null
+echo "0 17 * * 5 /usr/bin/fish $SCRIPT_PATH --non-interactive | sudo tee -a /etc/crontab > /dev/null
