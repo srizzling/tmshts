@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/bin/bash
 
 # Update package list
 sudo apt update
@@ -16,14 +16,11 @@ sudo npm install -g tempomat
 # Note: This might require interactive setup. Depending on what this does, you may need to handle this separately or manually.
 tempo setup
 
-# Install mail utilities for emailing from cron
-sudo apt install -y mailutils
-
 # Determine absolute path of the tmsht.fish script
-set script_path (pwd)/tmsht.fish
+SCRIPT_PATH="$(pwd)/tmsht.fish"
 
 # Ensure your script has execute permissions
-chmod +x $script_path
+chmod +x "$SCRIPT_PATH"
 
 # Add the fish script to cron
-echo "0 17 * * 5 /usr/bin/fish $script_path | sudo tee -a /etc/crontab > /dev/null
+echo "0 17 * * 5 /usr/bin/fish $SCRIPT_PATH | sudo tee -a /etc/crontab > /dev/null
