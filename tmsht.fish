@@ -1,12 +1,10 @@
 #!/usr/bin/env fish
 
 set -l JIRA_TO_LOG_AGAINST "RECO-576"
-
-# Defining the working week days
 set -l working_week "Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
 
 # Parse the options
-argparse 'd/dry-run' 'o/offset=' -- $argv
+argparse 'd/dry-run' 'o/offset=' 'n/non-interactive' 'h/holidays=' -- $argv
 
 set -l week_offset $_flag_offset
 set -l dry_run $_flag_dry_run
@@ -16,10 +14,18 @@ if test -z "$week_offset"
     set week_offset 0
 end
 
-echo "Select holidays from the list (use space to select, enter to confirm, esc to skip):"
-set -l selected_holidays (gum choose --item.foreground 250 --no-limit $working_week)
+# Decide how to get the selected holidays
+if test -n "$_flag_non_interactive"
+    if test -n "$_flag_holidays"
+        set selected_holidays (string split ',' $_flag_holidays)
+    else
+        set selected_holidays
+    end
+else
+    echo "Select holidays from the list (use space to select, enter to confirm, esc to skip):"
+    set selected_holidays (gum choose --item.foreground 250 --no-limit $working_week)
+end
 
-# Removing holidays from the working week
 set -l working_days
 for day in $working_week
     if not contains -- $day $selected_holidays
@@ -27,11 +33,9 @@ for day in $working_week
     end
 end
 
-# Printing the selected holidays and working days
 echo "Selected Holidays: " $selected_holidays
 echo "Working Days: " $working_days
 
-# Iterate over the selected holidays and perform some action
 for holiday in $selected_holidays
     set -l holiday "$holiday $week_offset week"
     set -l timesheetDate (date -d "$holiday" +"%Y-%m-%d")
@@ -41,7 +45,6 @@ for holiday in $selected_holidays
     end
 end
 
-# Iterate over the working days and perform some action
 for day in $working_days
     set -l day "$day $week_offset week"
     set -l timesheetDate (date -d "$day" +"%Y-%m-%d")
