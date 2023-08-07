@@ -13,7 +13,6 @@ sudo apt install -y npm
 sudo npm install -g tempomat
 
 # Run tempo setup
-# Note: This might require interactive setup. Depending on what this does, you may need to handle this separately or manually.
 tempo setup
 
 # Determine absolute path of the tmsht.fish script
